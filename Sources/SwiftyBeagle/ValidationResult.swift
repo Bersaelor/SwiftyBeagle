@@ -1,9 +1,3 @@
-//
-//  Validation.swift
-//  SwiftyBeagle
-//
-//  Created by Konrad Feiler on 07.09.18.
-//
 
 import Foundation
 

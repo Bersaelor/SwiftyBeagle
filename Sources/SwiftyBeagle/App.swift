@@ -10,12 +10,15 @@ public class App {
 
     let router = Router()
     
-    static let databaseName = "validations"
+    let scheduler = Scheduler()
     
-
+    static let databaseName = "validations"
     
     public func run() {
         postInit()
+        
+        scheduler.startValidatingCycle()
+        
         Kitura.addHTTPServer(onPort: 8080, with: router)
         Kitura.run()
     }

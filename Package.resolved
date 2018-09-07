@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "CircuitBreaker",
+        "repositoryURL": "https://github.com/IBM-Swift/CircuitBreaker.git",
+        "state": {
+          "branch": null,
+          "revision": "81581e3fb094ab4879aa2c5ce54201f1dbce0a7f",
+          "version": "5.0.1"
+        }
+      },
+      {
         "package": "HeliumLogger",
         "repositoryURL": "https://github.com/IBM-Swift/HeliumLogger.git",
         "state": {
@@ -98,6 +107,15 @@
           "branch": null,
           "revision": "693d2d28fe2f91aedf02c3754baade625fd97c46",
           "version": "17.0.2"
+        }
+      },
+      {
+        "package": "SwiftyRequest",
+        "repositoryURL": "https://github.com/IBM-Swift/SwiftyRequest.git",
+        "state": {
+          "branch": null,
+          "revision": "ba36fabce8eba5c524cc666e5b2c430df7a25883",
+          "version": "2.0.1"
         }
       },
       {
