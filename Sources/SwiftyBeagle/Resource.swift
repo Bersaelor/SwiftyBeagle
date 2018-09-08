@@ -23,21 +23,6 @@ extension Resource {
             }
         }
     }
-}
-
-extension Resource where A: Decodable {
-    init(url: URL) {
-        self.url = url
-        self.parse = {
-            do {
-                let decoder = JSONDecoder()
-                let value = try decoder.decode(A.self, from: $0)
-                return Result.success(value)
-            } catch {
-                return Result.failure(error)
-            }
-        }
-    }
     
     func load(completion: @escaping (Result<A>) -> Void) {
         Log.info("Fetching \(url)")
@@ -53,7 +38,21 @@ extension Resource where A: Decodable {
                 completion(Result.failure(SwiftyBeagleError.failedRetrievingData))
                 return
             }
-        }.resume()
+            }.resume()
     }
-    
+}
+
+extension Resource where A: Decodable {
+    init(url: URL) {
+        self.url = url
+        self.parse = {
+            do {
+                let decoder = JSONDecoder()
+                let value = try decoder.decode(A.self, from: $0)
+                return Result.success(value)
+            } catch {
+                return Result.failure(error)
+            }
+        }
+    }
 }
