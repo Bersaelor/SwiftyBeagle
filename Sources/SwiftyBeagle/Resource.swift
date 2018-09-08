@@ -1,6 +1,16 @@
 import Foundation
 import LoggerAPI
 
+// MARK: - Error
+
+///Error domain
+public let errorDomain: String = "SwiftBeagleDomain"
+
+///Error code
+public let errorRetrievingData: Int = 999
+
+// MARK: - Resource
+
 struct Resource<A> {
     let url: URL
     let parse: (Data) -> Result<A?>
@@ -47,7 +57,8 @@ extension Resource where A: Decodable {
                 completion(self.parse(data))
             } else {
                 Log.error("Error retrieving data")
-                completion(Result.failure(error ?? NSError()))
+                completion(Result.failure(error ?? NSError(domain: errorDomain, code: errorRetrievingData,
+                                                           userInfo: [NSLocalizedDescriptionKey: "Failed retrieving data from URL response" as Any])))
                 return
             }
             }.resume()
