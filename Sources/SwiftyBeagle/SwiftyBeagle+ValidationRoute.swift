@@ -10,7 +10,7 @@ extension SwiftyBeagle {
         app.router.delete("/validations", handler: deleteValidation)
     }
     
-    private func getValidations(completion: @escaping ([ValidationResult]?, RequestError?) -> Void) {
+    func getValidations(completion: @escaping ([ValidationResult]?, RequestError?) -> Void) {
         guard let database = database else {
             return completion(nil, .internalServerError)
         }
@@ -19,7 +19,7 @@ extension SwiftyBeagle {
         }
     }
     
-    private func addValidation(result: ValidationResult, completion: @escaping (ValidationResult?, RequestError?) -> Void) {
+    func addValidation(result: ValidationResult, completion: @escaping (ValidationResult?, RequestError?) -> Void) {
         guard let database = database else {
             return completion(nil, .internalServerError)
         }
@@ -33,7 +33,7 @@ extension SwiftyBeagle {
         }
     }
     
-    private func deleteValidation(id: String, completion: @escaping (RequestError?) -> Void) {
+    func deleteValidation(id: String, completion: @escaping (RequestError?) -> Void) {
         guard let database = database else {
             return completion(.internalServerError)
         }

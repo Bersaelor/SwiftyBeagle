@@ -19,6 +19,16 @@ public class SwiftyBeagle {
     public func run() {
         postInit()
         
+        scheduler.saveValidations = { [weak self] results in
+
+            for validationResult in results {
+                self?.addValidation(result: validationResult, completion: { (_, error) in
+                    if let error = error {
+                        Log.error("Failed saving validation due to \(error)")
+                    }
+                })
+            }
+        }
         scheduler.startValidatingCycle()
         
         Kitura.addHTTPServer(onPort: 8080, with: router)

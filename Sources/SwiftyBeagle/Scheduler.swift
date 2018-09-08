@@ -9,6 +9,7 @@ class Scheduler {
     private var isValidating: Bool = false
     
     var makeValidations: () -> [Validation] = { return [] }
+    var saveValidations: ([ValidationResult]) -> Void = { _ in }
     
     func startValidatingCycle() {
         startNewValidation()
@@ -38,6 +39,7 @@ class Scheduler {
     
     private func finishedValidations(with results: [ValidationResult]) {
         Log.info("Finished Validation with \(results.count) results")
+        saveValidations(results)
         isValidating = false
     }
 }
