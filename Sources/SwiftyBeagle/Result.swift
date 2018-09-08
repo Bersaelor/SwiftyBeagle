@@ -19,5 +19,17 @@ public extension Result {
         case let .failure(error): return .failure(error)
         }
     }
+}
 
+extension Result where Value == String {
+    
+    public var description: String {
+        switch self {
+        case .success(let value):
+            return value
+        case .failure(let error):
+            return "ERROR: \(error.localizedDescription)"
+        }
+    }
+    
 }

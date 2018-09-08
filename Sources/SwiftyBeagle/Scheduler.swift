@@ -31,26 +31,13 @@ class Scheduler {
         }
         isValidating = true
 
-        let taskGroup = DispatchGroup()
-
-        let validations = makeValidations()
-        Log.info("Starting \( validations.count ) Validations")
-
-        for validation in validations {
-            taskGroup.enter()
-            validation.start { (result) in
-                Log.info("result: \(result)")
-                taskGroup.leave()
-            }
-        }
-        
-        taskGroup.notify(queue: queue) {
-            self.finishedValidationTask()
+        makeValidations().validateAll { (results) in
+            self.finishedValidations(with: results)
         }
     }
     
-    private func finishedValidationTask() {
-        Log.info("Finished current Validation")
+    private func finishedValidations(with results: [ValidationResult]) {
+        Log.info("Finished Validation with \(results.count) results")
         isValidating = false
     }
 }

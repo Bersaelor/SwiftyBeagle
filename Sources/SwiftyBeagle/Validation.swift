@@ -3,50 +3,36 @@ import Foundation
 
 public protocol Validation {
     var urlString: String { get }
-    func start(completion: @escaping (Result<String>) -> Void)
+    func start(completion: @escaping (Result<(String, [Validation])>) -> Void)
 }
 
-struct FetchCodableResource<T: Codable>: Validation {
+extension Array where Element == Validation {
     
-    let urlString: String
-    let dataIntegrityCheck: (T) -> Result<T>
-    
-    func start(completion: @escaping (Result<String>) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)))
-            return
-        }
+    func validateAll(completion: @escaping ([ValidationResult]) -> Void) {
+        var results = [ValidationResult]()
+
+        let taskGroup = DispatchGroup()
         
-        Resource(url: url).load { (response: Result<T>) in
-            let validatedResponse = response.flatMap(self.dataIntegrityCheck)
-            completion(validatedResponse.map({
-                if let beagleDescribable = $0 as? BeagleStringConvertible {
-                    return beagleDescribable.beagleDescription
+        Log.info("Starting \(self.count) validations")
+        
+        for validation in self {
+            taskGroup.enter()
+            validation.start { (result) in
+                results.append(ValidationResult(result: result.map({ $0.0 })))
+                
+                if case .success(_, let validations) = result, !validations.isEmpty {
+                    validations.validateAll(completion: { (childResults) in
+                        results.append(contentsOf: childResults)
+                        taskGroup.leave()
+                    })
                 } else {
-                    return String(describing: $0)
+                    taskGroup.leave()
                 }
-            }))
-        }
-    }
-}
-
-struct FetchImage: Validation {
-    
-    let urlString: String
-    let dataIntegrityCheck: (Data) -> Result<Data>
-
-    func start(completion: @escaping (Result<String>) -> Void) {
-        guard let url = URL(string: urlString) else {
-            completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)))
-            return
+            }
         }
         
-        Resource(url: url, parse: { Result.success($0) }).load { (response: Result<Data>) in
-            let validatedResponse = response.flatMap(self.dataIntegrityCheck)
-            completion(validatedResponse.map({ "Successfully fetched \($0.count) bytes of image data." }))
-        }        
+        taskGroup.wait()
+        completion(results)
     }
     
 }
-
-
