@@ -24,18 +24,25 @@ extension Resource {
         }
     }
     
-    func load(completion: @escaping (Result<A>) -> Void) {
-        Log.info("Fetching \(url)")
+    func load(completion: @escaping (Result<(A)>, TimeInterval) -> Void) {
+        Log.verbose("Fetching \(url)")
         
+        let timeStarted = DispatchTime.now()
+
         URLSession(configuration: .default).dataTask(with: url) { data, _, error in
+            let timeResult = DispatchTime.now()
+            let timeElapsed: TimeInterval = Double(timeResult.uptimeNanoseconds - timeStarted.uptimeNanoseconds) / 1_000_000_000
+
             if let error = error {
-                completion(Result.failure(error))
+                completion(Result.failure(error), timeElapsed)
+                return
             }
             if let data = data {
-                Log.verbose("Successfully fetched \(data.count) bytes from \(self.url)")
-                completion(self.parse(data))
+
+                Log.verbose("Successfully fetched \(data.count) bytes from \(self.url) in \(timeElapsed * 1000)ms")
+                completion(self.parse(data), timeElapsed)
             } else {
-                completion(Result.failure(SwiftyBeagleError.failedRetrievingData))
+                completion(Result.failure(SwiftyBeagleError.failedRetrievingData), timeElapsed)
                 return
             }
             }.resume()

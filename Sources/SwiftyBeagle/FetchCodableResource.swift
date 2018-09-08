@@ -1,23 +1,24 @@
 import Foundation
 
 struct FetchCodableResource<T: Codable>: Validation {
-    
+
     let urlString: String
     let dataIntegrityCheck: (T) -> Result<T>
     let makeChildValidations: (T) -> [Validation]
     
-    func start(completion: @escaping (Result<(String, [Validation])>) -> Void) {
+    func start(completion: @escaping (Result<(String, [Validation])>, TimeInterval) -> Void) {
         guard let url = URL(string: urlString) else {
-            completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)))
+            completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)), 0)
             return
         }
         
-        Resource(url: url).load { (response: Result<T>) in
+        Resource(url: url).load { (response: Result<(T)>, timeElapsed: TimeInterval) in
             let validatedResponse = response.flatMap(self.dataIntegrityCheck)
-            completion(validatedResponse.map({
-                let text = ($0 as? BeagleStringConvertible)?.beagleDescription ?? String(describing: $0)
-                return (text, self.makeChildValidations($0))
-            }))
+            let resultAndChildValidations = validatedResponse.map({ (value) -> (String, [Validation]) in
+                let text = (value as? BeagleStringConvertible)?.beagleDescription ?? String(describing: value)
+                return (text, self.makeChildValidations(value))
+            })
+            completion(resultAndChildValidations, timeElapsed)
         }
     }
     

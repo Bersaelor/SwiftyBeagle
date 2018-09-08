@@ -24,7 +24,8 @@ extension ValidationResult {
                 for document in documents["rows"].arrayValue {
                     let id = document["id"].stringValue
                     let text = document["doc"]["text"].stringValue
-                    results.append(ValidationResult(id: id, text: text))
+                    let duration = document["doc"]["duration"].doubleValue
+                    results.append(ValidationResult(id: id, text: text, duration: duration))
                 }
                 callback(results, nil)
             }
@@ -41,7 +42,7 @@ extension ValidationResult {
                                                  code: 400,
                                                  userInfo: ["localizedDescription": "Duplicate entry"]))
                 }
-                database.create(JSON(["text": validationResult.text])) { id, _, _, error in
+                database.create(JSON(["text": validationResult.text, "duration": validationResult.duration])) { id, _, _, error in
                     callback(id, error)
                 }
             }
@@ -54,7 +55,9 @@ extension ValidationResult {
                 guard let document = document else {
                     return callback(nil, error)
                 }
-                let result = ValidationResult(id: document["_id"].stringValue, text: document["text"].stringValue)
+                let result = ValidationResult(id: document["_id"].stringValue,
+                                              text: document["text"].stringValue,
+                                              duration: document["duration"].doubleValue)
                 callback(result, nil)
             }
         }
