@@ -1,19 +1,10 @@
 import Foundation
 import LoggerAPI
 
-// MARK: - Error
-
-///Error domain
-public let errorDomain: String = "SwiftBeagleDomain"
-
-///Error code
-public let errorRetrievingData: Int = 999
-
-// MARK: - Resource
 
 struct Resource<A> {
     let url: URL
-    let parse: (Data) -> Result<A?>
+    let parse: (Data) -> Result<A>
 }
 
 extension Resource {
@@ -22,8 +13,11 @@ extension Resource {
         self.parse = { data in
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: [])
-                let result = try parseJSON(json)
-                return Result.success(result)
+                if let result = try parseJSON(json) {
+                    return Result.success(result)
+                } else {
+                    return Result.failure(SwiftyBeagleError.failedParsingJSON)
+                }
             } catch {
                 return Result.failure(error)
             }
@@ -45,23 +39,21 @@ extension Resource where A: Decodable {
         }
     }
     
-    func load(completion: @escaping (Result<A?>) -> Void) {
+    func load(completion: @escaping (Result<A>) -> Void) {
         Log.info("Fetching \(url)")
         
         URLSession(configuration: .default).dataTask(with: url) { data, _, error in
             if let error = error {
-                Log.error("DataTask error: " + error.localizedDescription)
+                completion(Result.failure(error))
             }
             if let data = data {
-                Log.info("Successfully fetched \(data.count) bytes from \(self.url)")
+                Log.verbose("Successfully fetched \(data.count) bytes from \(self.url)")
                 completion(self.parse(data))
             } else {
-                Log.error("Error retrieving data")
-                completion(Result.failure(error ?? NSError(domain: errorDomain, code: errorRetrievingData,
-                                                           userInfo: [NSLocalizedDescriptionKey: "Failed retrieving data from URL response" as Any])))
+                completion(Result.failure(SwiftyBeagleError.failedRetrievingData))
                 return
             }
-            }.resume()
+        }.resume()
     }
     
 }

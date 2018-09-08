@@ -3,7 +3,7 @@ import Kitura
 import KituraContracts
 import LoggerAPI
 
-extension App {
+extension SwiftyBeagle {
     func initializeValidationRoutes() {
         app.router.get("/validations", handler: getValidations)
         app.router.post("/validations", handler: addValidation)

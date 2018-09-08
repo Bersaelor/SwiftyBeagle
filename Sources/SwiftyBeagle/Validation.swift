@@ -1,26 +1,20 @@
 import LoggerAPI
 import Foundation
 
-class Validation {
+
+struct Validation<T: Codable> {
     
-    func start(completion: @escaping () -> Void) {
-        
-        // TODO: make flexible
-        let urlString = "https://www.kickstarter.com/discover/advanced.json?sort=newest&seed=2478857&page=0"
-        
+    let urlString: String
+    let dataIntegrityCheck: (T) -> Result<T>
+    
+    func start(completion: @escaping (Result<T>) -> Void) {
         guard let url = URL(string: urlString) else {
-            completion()
+            completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)))
             return
         }
         
-        Resource(url: url).load { (response: Result<KSSearchResponse?>) in
-            switch response {
-            case .success(let value):
-                Log.info("result: \(value?.projects.first?.name ?? "?")")
-            case .failure(let error):
-                Log.error("failure: \(error)")
-            }
-            completion()
+        Resource(url: url).load { (response: Result<T>) in
+            completion( response.flatMap(self.dataIntegrityCheck) )
         }
     }
     

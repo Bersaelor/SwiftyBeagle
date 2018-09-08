@@ -31,7 +31,8 @@ class Scheduler {
         Log.info("Starting Validation")
         isValidating = true
 
-        Validation().start {
+        makeValidations().start { (result) in
+            Log.info("result: \(result.map({ $0.projects.first!.name }))")
             self.finishedValidationTask()
         }
     }

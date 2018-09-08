@@ -4,6 +4,6 @@ import LoggerAPI
 
 HeliumLogger.use()
 
-let app = App()
+let app = SwiftyBeagle()
 
 app.run()
