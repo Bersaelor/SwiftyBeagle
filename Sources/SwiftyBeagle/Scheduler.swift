@@ -8,8 +8,9 @@ class Scheduler {
 
     private var isValidating: Bool = false
     
+    var makeValidations: () -> [Validation] = { return [] }
+    
     func startValidatingCycle() {
-        print("startValidatingCycle")
         startNewValidation()
         waitForNextValidation()
     }
@@ -28,17 +29,28 @@ class Scheduler {
             Log.warning("Previous Validation isn't finished yet, skipping one validation")
             return
         }
-        Log.info("Starting Validation")
         isValidating = true
 
-        makeValidations().start { (result) in
-            Log.info("result: \(result.map({ $0.projects.first!.name }))")
+        let taskGroup = DispatchGroup()
+
+        let validations = makeValidations()
+        Log.info("Starting \( validations.count ) Validations")
+
+        for validation in validations {
+            taskGroup.enter()
+            validation.start { (result) in
+                Log.info("result: \(result)")
+                taskGroup.leave()
+            }
+        }
+        
+        taskGroup.notify(queue: queue) {
             self.finishedValidationTask()
         }
     }
     
     private func finishedValidationTask() {
-        Log.warning("Finished current Validation")
+        Log.info("Finished current Validation")
         isValidating = false
     }
 }

@@ -5,14 +5,16 @@ import LoggerAPI
 
 public class SwiftyBeagle {
 
-    var client: CouchDBClient?
-    var database: Database?
-
-    let router = Router()
+    internal var client: CouchDBClient?
+    internal var database: Database?
+    internal let router = Router()
+    internal let scheduler = Scheduler()
+    internal static let databaseName = "validations"
     
-    let scheduler = Scheduler()
-    
-    static let databaseName = "validations"
+    public var makeValidations: () -> [Validation] {
+        get { return scheduler.makeValidations }
+        set { scheduler.makeValidations = newValue }
+    }
     
     public func run() {
         postInit()

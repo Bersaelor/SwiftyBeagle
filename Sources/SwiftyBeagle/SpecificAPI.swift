@@ -17,13 +17,8 @@ enum KSErrors: Error {
     case projectsArrayEmpty
 }
 
-func makeValidations() -> Validation<KSSearchResponse> {
-    let urlString = "https://www.kickstarter.com/discover/advanced.json?sort=newest&seed=2478857&page=0"
-
-    return Validation(urlString: urlString) { (projectResponse) in
-        if projectResponse.projects.isEmpty {
-            return Result.failure(KSErrors.projectsArrayEmpty)
-        }
-        return Result.success(projectResponse)
+extension KSSearchResponse: BeagleStringConvertible {
+    var beagleDescription: String {
+        return "Seach Response with \(projects.count) projects, first ones name is \"\(projects.first?.name ?? "?")\""
     }
 }
