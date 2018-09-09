@@ -2,6 +2,9 @@ version: '3'
 services:
   db:
     image: couchdb
+    volumes:
+      # So CouchDB can pick up the configuration
+      - ./couchdb-config:/opt/couchdb/etc/local.d
     environment:
       - COUCHDB_USER=beagle
       - COUCHDB_PASSWORD=54321
