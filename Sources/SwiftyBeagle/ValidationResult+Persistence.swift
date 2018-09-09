@@ -6,10 +6,18 @@ import LoggerAPI
 extension ValidationResult {
     
     class Persistence {
-        static func getAll(from database: Database,
+        static func getAll(from database: Database, with summaryId: String? = nil,
                            callback: @escaping (_ validations: [ValidationResult]?, _ error: NSError?) -> Void) {
             
-            database.queryByView("all_validations", ofDesign: "main_design", usingParameters: []) { (documents, error) in
+            let parameters = summaryId.flatMap({ key -> [Database.QueryParameters] in
+                #if os(Linux)
+                    let query = key
+                #else
+                    let query = key as NSString
+                #endif
+                return [.keys([query])] }) ?? []
+            
+            database.queryByView("all_validations", ofDesign: "main_design", usingParameters: parameters) { (documents, error) in
                 guard let documents = documents else {
                     callback(nil, error)
                     return

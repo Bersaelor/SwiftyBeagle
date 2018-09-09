@@ -38,6 +38,7 @@ public class SwiftyBeagle {
                     })
                 }
             })
+            self?.refreshSummaries()
         }
         
         connectToCouchDB()
@@ -49,6 +50,30 @@ public class SwiftyBeagle {
     public func scheduleValidations() {
         Log.info("Start the validation cycle")
         scheduler.startValidatingCycle()
+    }
+    
+    var cachedSummaries = [ValidationSummary]() {
+        didSet {
+            Log.info("Now caching \(cachedSummaries.count) summaries")
+            if let summary = cachedSummaries.first {
+                Log.info("First summary is from \(summary.date)")
+                getAllResults(for: summary) { (results, _) in
+                    Log.info("Found \(results?.count ?? -1) results for this summary")
+                }
+            }
+        }
+    }
+    
+    func refreshSummaries() {
+        getSummaries { [weak self] (summaries, error) in
+            if let error = error {
+                Log.error("Failed fetching summaries: \(error)")
+                return
+            }
+            if let summaries = summaries {
+                self?.cachedSummaries = summaries
+            }
+        }
     }
 }
 

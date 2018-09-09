@@ -8,7 +8,6 @@ extension ValidationSummary {
     class Persistence {
         static func getAll(from database: Database,
                            callback: @escaping (_ summaries: [ValidationSummary]?, _ error: NSError?) -> Void) {
-            
             database.queryByView("all_summaries", ofDesign: "main_design", usingParameters: []) { (documents, error) in
                 guard let documents = documents else {
                     callback(nil, error)

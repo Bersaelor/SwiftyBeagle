@@ -5,3 +5,9 @@ struct ValidationSummary: Codable, Equatable {
     let count: Int
     let timeStamp: Double
 }
+
+extension ValidationSummary {
+    var date: Date {
+        return Date(timeIntervalSinceReferenceDate: timeStamp)
+    }
+}

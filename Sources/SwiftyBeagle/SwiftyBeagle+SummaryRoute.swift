@@ -19,6 +19,20 @@ extension SwiftyBeagle {
         }
     }
     
+    func getAllResults(for summary: ValidationSummary, completion: @escaping ([ValidationResult]?, RequestError?) -> Void) {
+        guard let id = summary.id, let database = database else {
+            return completion(nil, .internalServerError)
+        }
+        ValidationResult.Persistence.getAll(from: database, with: id) { (results, error) in
+            if let error = error {
+                Log.error("Failed to retrieve results for summary: \(error)")
+                completion(nil, .internalServerError)
+            } else if let results = results {
+                completion(results, nil)
+            }
+        }
+    }
+    
     func addSummary(_ summary: ValidationSummary, completion: @escaping (ValidationSummary?, RequestError?) -> Void) {
         guard let database = database else {
             return completion(nil, .internalServerError)
