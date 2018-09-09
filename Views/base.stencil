@@ -48,38 +48,12 @@
     <body>
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Borace 3000</a>
-            </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="/"><div class="rounded-corners"><img src="/nickplay@2x.png" width=40></div> <span class="sr-only">(current)</span></a></li>
-                <li><a href="/mtvplay"><div class="rounded-corners"><img src="/mtvplay@2x.png" width=40></div></a></li>
-                <li><a href="/betplay"><div class="rounded-corners"><img src="/betplay@2x.png" width=40></div></a></li>
-                <li><a href="/ccplay"><div class="rounded-corners"><img src="/ccplay@2x.png" width=40></div></a></li>
-                <li><a href="/tvland"><div class="rounded-corners"><img src="/tvland@2x.png" width=40></div></a></li>
-                <li><a href="/cmt"><div class="rounded-corners"><img src="/cmt@2x.png" width=40></div></a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Environment <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Live</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Staging</a></li>
-                  </ul>
-                </li>
-              </ul>
+
             </div><!-- /.navbar-collapse -->
+            <h3>SwiftyBeagle</h3>
             </div><!-- /.container -->
         </nav>
         <div id="content">
@@ -90,8 +64,7 @@
         <footer id="footer">
             <div class="container">
             {% block footer %}
-                <p align="center">Environment: {{ environment.environment }}, Borace-Version: {{ environment.version }} </p>
-                <p align="center">Uptime: {{ app.uptime }}, <a href="./swiftmetrics-dash">Metrics</a> </p>
+                <p align="center">Uptime: {{ app.uptime }} </p>
                 <p align="center">
                     Served with the power of <BR>
                     <img src="/Apple_Swift_logo.png" width=64>

@@ -2,8 +2,23 @@ import CouchDB
 import Foundation
 import Kitura
 import LoggerAPI
+import KituraStencil
 
 public class SwiftyBeagle {
+
+    private let startTime = Date()
+    
+    var upTime: String {
+        #if os(OSX) || os(iOS) || os(tvOS)
+            return DateComponentsFormatter().string(from: Date().timeIntervalSince(startTime))?.appending("s") ?? "?s"
+        #else
+            let interval = Int(Date().timeIntervalSince(startTime))
+            let seconds = interval % 60
+            let minutes = (interval / 60) % 60
+            let hours = (interval / 3600)
+            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        #endif
+    }
 
     internal var client: CouchDBClient?
     internal var database: Database?
@@ -142,6 +157,16 @@ extension SwiftyBeagle {
             defer { next() }
 
             response.status(.OK).send("SwiftyBeagle")
+        }
+
+        router.all("/", middleware: StaticFileServer(path: "./static"))
+
+        router.add(templateEngine: StencilTemplateEngine())
+        
+        router.get("/") { [weak self] req, res, next in
+            defer { next() }
+            guard let strongSelf = self else { return }
+            try res.renderHomePage(for: strongSelf, summaries: strongSelf.cachedSummaries)
         }
     }
 }

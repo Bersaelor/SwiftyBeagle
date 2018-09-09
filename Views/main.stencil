@@ -1,85 +1,26 @@
 {% extends "base.stencil" %}
 
-{% block title %} Borace3000 {% endblock %}
+{% block title %} SwiftyBeagle {% endblock %}
 
 {% block content %}
-<H3 align="center">Checking {{ appname }} feeds, so you dont have to! </H3>
+<H3 align="center">Keeping an eye on api-responses for you </H3>
 
+    <p align="center">
     {% if validations %}
-        <H2>Previous Validations:</H2>
+        <H2>Validations:</H2>
         <ul>
             {% for validation in validations %}
             <li> <a href="{{ validation.url }}"> {{ validation.description }} </a> </li>
             {% endfor %}
         </ul>
     {% else %}
-        Borace just started, no full validations finished yet
-    {% endif %}
-
-    <p align="center">
-    {% if isSearchingEmptyShows %}
-        ⚙️ Currently searching for empty shows ⚙️
-    {% elif validations %}
-        <button class="btn btn-default" onclick="httpGetAsync('/triggeremptyshows/{{ brandKey }}')">Trigger a new search for empty Series</button>
-    {% else %}
-        Can't trigger a search for empty shows until first validation is through
-    {% endif %}
-    {% if hasSearchedForEmptyShows %}
-        <BR><BR>
-        {% if emptyShows %}
-            <font color="red">🚨<a href="/emptyshows/{{ brandKey }}">Found {{ emptyShows }} empty series</a>🚨</font>
-        {% else %}
-            Last check couldn't find any empty series 👌🏽
-        {% endif %}
+        SwiftyBeagle just started, no full validations finished yet
     {% endif %}
     </p>
 
-    <H2>Currently fetching:</H2>
-
-    {% if successfulFeeds or failingFeeds %}
-        <p><ul>
-            {% for successful in successfulFeeds %}
-            <li><div class="{{ successful.divClasses }}">
-                <b>{{ successful.parameterDescription }}</b>
-                <ul>
-                    {% for fetch in successful.listOfFetches %}
-                    <li>{{ fetch.description }} for <a href={{ fetch.url }}>url</a></li>
-                    {% endfor %}
-                </ul>
-                <BR>
-            </div></li>
-            {% empty %}
-            <li>No successful fetch</li>
-            {% endfor %}
-        </ul></p>
-        
-        <H4>Errors:</H4>
-        <p><ul>
-            {% for error in failingFeeds %}
-            <li>{{ error }}</li>
-            {% empty %}
-            <li>None 😎</li>
-            {% endfor %}
-        </ul></p>
-    {% else %}
-        Currently not busy, waiting for next fetch cycle
-    {% endif %}
 
 {% endblock %}
 
 {% block footer %}
     {{ block.super }}
-    <script type="text/javascript">
-        function httpGetAsync(theUrl)
-        {
-            console.log(theUrl);
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function() {
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                location.reload();
-            }
-            xmlHttp.open("GET", theUrl, true); // true for asynchronous
-            xmlHttp.send(null);
-        }
-    </script>
 {% endblock %}
