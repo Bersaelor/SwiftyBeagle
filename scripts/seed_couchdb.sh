@@ -36,6 +36,11 @@ echo "    default for --url is '$url'"
 exit
 fi
 
+host=${url#"http://"}
+
+$current_dir/wait-for-it.sh "$host" -- echo "$host is up"
+
+echo "Recreating '$database' on '$url'"
 
 # delete and create database to ensure it's empty
 curl -X DELETE $url/$database -u $username:$password

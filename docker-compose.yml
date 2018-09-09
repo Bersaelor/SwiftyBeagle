@@ -26,4 +26,4 @@ services:
   #   depends_on:
   #     - db
   #   command: /app/.build/debug/SwiftyBeagle --dbHost db
-    
+
