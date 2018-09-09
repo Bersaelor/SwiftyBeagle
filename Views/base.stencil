@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang=\"en\">
+    
+    <head>
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+            
+        {% block import %}
+        <!-- Include Twitter Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        {% endblock %}
+        
+        <meta charset=\"UTF-8\">
+        <style>
+            html {
+                height: 100%;
+            }
+        
+        .navbar-nav > li > a {
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+            
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+        
+        div.rounded-corners {
+            border-radius: 20%;
+            overflow: hidden;   
+        }
+        
+        #content {
+            background-color: #ffffff;
+            flex: 1;
+            padding: 60px 20px 40px;
+        }
+        
+        #footer {
+            background-color: #ffffff;
+            padding: 20px;
+        }
+        </style>
+        <title>{% block title %}Example{% endblock %}</title>
+    </head>
+    
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Borace 3000</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="active"><a href="/"><div class="rounded-corners"><img src="/nickplay@2x.png" width=40></div> <span class="sr-only">(current)</span></a></li>
+                <li><a href="/mtvplay"><div class="rounded-corners"><img src="/mtvplay@2x.png" width=40></div></a></li>
+                <li><a href="/betplay"><div class="rounded-corners"><img src="/betplay@2x.png" width=40></div></a></li>
+                <li><a href="/ccplay"><div class="rounded-corners"><img src="/ccplay@2x.png" width=40></div></a></li>
+                <li><a href="/tvland"><div class="rounded-corners"><img src="/tvland@2x.png" width=40></div></a></li>
+                <li><a href="/cmt"><div class="rounded-corners"><img src="/cmt@2x.png" width=40></div></a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Environment <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Live</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Staging</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+            </div><!-- /.container -->
+        </nav>
+        <div id="content">
+            <div class="container">
+            {% block content %} {% endblock %}
+            </div> <!-- /.container -->
+        </div>
+        <footer id="footer">
+            <div class="container">
+            {% block footer %}
+                <p align="center">Environment: {{ environment.environment }}, Borace-Version: {{ environment.version }} </p>
+                <p align="center">Uptime: {{ app.uptime }}, <a href="./swiftmetrics-dash">Metrics</a> </p>
+                <p align="center">
+                    Served with the power of <BR>
+                    <img src="/Apple_Swift_logo.png" width=64>
+                </p>
+            {% endblock %}
+            </div> <!-- /.container -->
+            <!-- Bootstrap core JavaScript
+            ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+            <script>
+                $(document).ready(function() {
+                  $('li.active').removeClass('active');
+                  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+                });
+            </script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+            <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+        </footer>
+    </body>
+</html>
