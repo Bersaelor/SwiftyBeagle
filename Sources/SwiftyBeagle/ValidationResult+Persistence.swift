@@ -8,26 +8,30 @@
 import Foundation
 import CouchDB
 import SwiftyJSON
-
+import LoggerAPI
 
 extension ValidationResult {
     
     class Persistence {
         static func getAll(from database: Database,
                            callback: @escaping (_ acronyms: [ValidationResult]?, _ error: NSError?) -> Void) {
-            database.retrieveAll(includeDocuments: true) { documents, error in
+            
+            database.queryByView("all_validations", ofDesign: "main_design", usingParameters: []) { (documents, error) in
                 guard let documents = documents else {
                     callback(nil, error)
                     return
                 }
-                var results: [ValidationResult] = []
-                for document in documents["rows"].arrayValue {
-                    let id = document["id"].stringValue
-                    let text = document["doc"]["text"].stringValue
-                    let duration = document["doc"]["duration"].doubleValue
-                    results.append(ValidationResult(id: id, text: text, duration: duration))
-                }
-                callback(results, nil)
+                
+                let validations = documents["rows"].array?.map({ (json) -> ValidationResult in
+                    let data = json["value"]
+                    let id = json["id"].stringValue
+                    let text = data["text"].stringValue
+                    let duration = data["duration"].doubleValue
+
+                    return ValidationResult(id: id, text: text, duration: duration)
+                }) ?? []
+                
+                callback(validations, nil)
             }
         }
         

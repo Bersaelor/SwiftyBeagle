@@ -2,6 +2,8 @@ version: '3'
 services:
   db:
     image: couchdb
+    ports:
+      - "5984:5984"
     volumes:
       # So CouchDB can pick up the configuration
       - ./couchdb-config:/opt/couchdb/etc/local.d
@@ -16,12 +18,12 @@ services:
     command: /root/SwiftyBeagle/scripts/seed_couchdb.sh --username=beagle --password=54321 --url=http://db:5984
     links:
       - db
-      
-  web:
-    build: .
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    command: /app/.build/debug/SwiftyBeagle --dbHost db
+  #
+  # web:
+  #   build: .
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - db
+  #   command: /app/.build/debug/SwiftyBeagle --dbHost db
     
