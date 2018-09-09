@@ -1,0 +1,9 @@
+{
+  "id": "_design/main_design",
+  "views": {
+    "all_validations": {
+      "map" : "function(doc) {  if (doc.type == 'validation') { emit([doc.text, doc.duration], doc); } }"
+    }
+  },
+  "language": "javascript"
+}

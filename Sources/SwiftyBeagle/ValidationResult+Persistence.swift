@@ -42,7 +42,10 @@ extension ValidationResult {
                                                  code: 400,
                                                  userInfo: ["localizedDescription": "Duplicate entry"]))
                 }
-                database.create(JSON(["text": validationResult.text, "duration": validationResult.duration])) { id, _, _, error in
+                let json = JSON(["type": "validation",
+                                 "text": validationResult.text,
+                                 "duration": validationResult.duration])
+                database.create(json) { id, _, _, error in
                     callback(id, error)
                 }
             }

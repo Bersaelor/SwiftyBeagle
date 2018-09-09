@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: couchdb
+    environment:
+      - COUCHDB_USER=beagle
+      - COUCHDB_PASSWORD=54321
+      
+  seed-db:
+    image: tutum/curl
+    volumes:
+      - .:/root/SwiftyBeagle
+    command: /root/SwiftyBeagle/scripts/seed_couchdb.sh --username=beagle --password=54321 --url=http://db:5984
+    links:
+      - db
+      
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command: /app/.build/debug/SwiftyBeagle --dbHost db
+    

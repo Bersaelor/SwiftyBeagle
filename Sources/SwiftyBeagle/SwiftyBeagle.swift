@@ -9,7 +9,9 @@ public class SwiftyBeagle {
     internal var database: Database?
     internal let router = Router()
     internal let scheduler = Scheduler()
-    internal static let databaseName = "validations"
+    internal static let databaseName = "validations_db"
+    
+    private let dbPort: Int16 = 5984
     
     public var makeValidations: () -> [Validation] {
         get { return scheduler.makeValidations }
@@ -17,10 +19,9 @@ public class SwiftyBeagle {
     }
     
     public func run() {
-        postInit()
+        connectToCouchDB()
         
         scheduler.saveValidations = { [weak self] results in
-
             for validationResult in results {
                 self?.addValidation(result: validationResult, completion: { (_, error) in
                     if let error = error {
@@ -29,25 +30,51 @@ public class SwiftyBeagle {
                 })
             }
         }
-        scheduler.startValidatingCycle()
         
         Kitura.addHTTPServer(onPort: 8080, with: router)
         Kitura.run()
+    }
+    
+    public func scheduleValidations() {
+        Log.info("Start the validation cycle")
+        scheduler.startValidatingCycle()
     }
 }
 
 // MARK: DB related code
 extension SwiftyBeagle {
-    private func postInit() {
-        let connectionProperties = ConnectionProperties(host: "localhost", port: 5984, secured: false)
+    
+    private var dbHostName: String {
+        for (index, argument) in CommandLine.arguments.enumerated() {
+            if argument == "--dbHost", index + 1 < CommandLine.arguments.count {
+                return CommandLine.arguments[index+1]
+            }
+        }
+        
+        return "localhost"
+    }
+
+    private func connectToCouchDB() {
+        Log.info("Connecting to db on \(dbHostName):\(dbPort)")
+        let connectionProperties = ConnectionProperties(host: dbHostName, port: dbPort, secured: false,
+                                                        username: "beagle", password: "54321")
         let client = CouchDBClient(connectionProperties: connectionProperties)
         self.client = client
-        client.dbExists(SwiftyBeagle.databaseName) { exists, _ in
+        client.dbExists(SwiftyBeagle.databaseName) { exists, error in
+            if let error = error {
+                Log.error("Failed to query whether db Exists! \(error)")
+                self.client = nil
+                Log.error("Retrying db connection in 5s")
+                DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 5, execute: {
+                    self.connectToCouchDB()
+                })
+                return
+            }
             guard exists else {
                 self.createNewDatabase()
                 return
             }
-            Log.info("Acronyms database located - loading...")
+            Log.info("Validations database located - loading...")
             self.finalizeRoutes(with: Database(connProperties: connectionProperties, dbName: SwiftyBeagle.databaseName))
         }
     }
@@ -69,5 +96,15 @@ extension SwiftyBeagle {
         self.database = database
         initializeValidationRoutes()
         Log.info("Validation routes created")
+        initializeHTMLRoutes()
+        scheduleValidations()
+    }
+    
+    private func initializeHTMLRoutes() {
+        router.get("/") { _, response, next in
+            defer { next() }
+
+            response.status(.OK).send("SwiftyBeagle")
+        }
     }
 }
