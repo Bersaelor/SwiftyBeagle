@@ -3,6 +3,9 @@
   "views": {
     "all_validations": {
       "map" : "function(doc) {  if (doc.type == 'validation') { emit([doc.text, doc.duration], doc); } }"
+    },
+    "all_summaries": {
+        "map" : "function(doc) {  if (doc.type == 'summary') { emit(doc.timeStamp, doc); } }"
     }
   },
   "language": "javascript"

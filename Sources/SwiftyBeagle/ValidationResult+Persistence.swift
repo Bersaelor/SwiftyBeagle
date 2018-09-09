@@ -1,10 +1,3 @@
-//
-//  ValidationResult+Persistence.swift
-//  SwiftyBeagle
-//
-//  Created by Konrad Feiler on 07.09.18.
-//
-
 import Foundation
 import CouchDB
 import SwiftyJSON
@@ -14,7 +7,7 @@ extension ValidationResult {
     
     class Persistence {
         static func getAll(from database: Database,
-                           callback: @escaping (_ acronyms: [ValidationResult]?, _ error: NSError?) -> Void) {
+                           callback: @escaping (_ validations: [ValidationResult]?, _ error: NSError?) -> Void) {
             
             database.queryByView("all_validations", ofDesign: "main_design", usingParameters: []) { (documents, error) in
                 guard let documents = documents else {
@@ -23,12 +16,14 @@ extension ValidationResult {
                 }
                 
                 let validations = documents["rows"].array?.map({ (json) -> ValidationResult in
-                    let data = json["value"]
                     let id = json["id"].stringValue
+
+                    let data = json["value"]
+                    let summaryId = data["summaryId"].stringValue
                     let text = data["text"].stringValue
                     let duration = data["duration"].doubleValue
-
-                    return ValidationResult(id: id, text: text, duration: duration)
+                    
+                    return ValidationResult(id: id, text: text, duration: duration, summaryId: summaryId)
                 }) ?? []
                 
                 callback(validations, nil)
@@ -48,14 +43,14 @@ extension ValidationResult {
                 }
                 let json = JSON(["type": "validation",
                                  "text": validationResult.text,
-                                 "duration": validationResult.duration])
+                                 "duration": validationResult.duration,
+                                 "summaryId": validationResult.summaryId ?? "-1"])
                 database.create(json) { id, _, _, error in
                     callback(id, error)
                 }
             }
         }
         
-        // 4
         static func get(from database: Database, with id: String,
                         callback: @escaping (_ acronym: ValidationResult?, _ error: NSError?) -> Void) {
             database.retrieve(id) { document, error in
@@ -64,7 +59,8 @@ extension ValidationResult {
                 }
                 let result = ValidationResult(id: document["_id"].stringValue,
                                               text: document["text"].stringValue,
-                                              duration: document["duration"].doubleValue)
+                                              duration: document["duration"].doubleValue,
+                                              summaryId: document["summaryId"].stringValue)
                 callback(result, nil)
             }
         }

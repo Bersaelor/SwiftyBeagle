@@ -19,17 +19,28 @@ public class SwiftyBeagle {
     }
     
     public func run() {
-        connectToCouchDB()
-        
         scheduler.saveValidations = { [weak self] results in
-            for validationResult in results {
-                self?.addValidation(result: validationResult, completion: { (_, error) in
-                    if let error = error {
-                        Log.error("Failed saving validation due to \(error)")
-                    }
-                })
-            }
+            let summary = ValidationSummary(id: nil, count: results.count, timeStamp: Date.timeIntervalSinceReferenceDate)
+            self?.addSummary(summary, completion: { (summary, error) in
+                if let error = error {
+                    Log.error("Failed save summary of validation due to \(error)")
+                    return
+                }
+                guard let summary = summary, summary.id != nil else {
+                    Log.error("After saving the summary to the db, it should have an id")
+                    return
+                }
+                for validationResult in results {
+                    self?.addValidation(result: validationResult.connected(to: summary), completion: { (result, error) in
+                        if let error = error {
+                            Log.error("Failed saving validation due to \(error)")
+                        }
+                    })
+                }
+            })
         }
+        
+        connectToCouchDB()
         
         Kitura.addHTTPServer(onPort: 8080, with: router)
         Kitura.run()
@@ -95,6 +106,7 @@ extension SwiftyBeagle {
     private func finalizeRoutes(with database: Database) {
         self.database = database
         initializeValidationRoutes()
+        initializeSummaryRoutes()
         Log.info("Validation routes created")
         initializeHTMLRoutes()
         scheduleValidations()
