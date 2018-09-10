@@ -1,15 +1,16 @@
 {% extends "base.stencil" %}
 
-{% block title %}  {% endblock %}
+{% block title %} Validations {% endblock %}
 
 {% block content %}
-<H3 align="center">Keeping an eye on api-responses for you </H3>
+<H3 align="center"> {{ summary.description }} </H3>
 
     <p align="center">
     {% if validations %}
+        <H4>Validations:</H4>
         <ul>
             {% for validation in validations %}
-            <li> <a href="{{ validation.url }}"> {{ validation.description }} </a> </li>
+            <li> Fetching <a href="{{ validation.url }}"> url </a> took {{ validation.duration }}ms, result: {{ validation.description }}</li>
             {% endfor %}
         </ul>
     {% else %}

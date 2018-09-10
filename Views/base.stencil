@@ -1,90 +1,94 @@
 <!DOCTYPE html>
-<html lang=\"en\">
+<html lang=\"en\">    
+  <head>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        
+    {% block import %}
+    <!-- Include Twitter Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    {% endblock %}
     
-    <head>
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-            
-        {% block import %}
-        <!-- Include Twitter Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        {% endblock %}
-        
-        <meta charset=\"UTF-8\">
-        <style>
-            html {
-                height: 100%;
-            }
-        
-        .navbar-nav > li > a {
-          padding-top: 5px;
-          padding-bottom: 5px;
-        }
-            
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100%;
-        }
-        
-        div.rounded-corners {
-            border-radius: 20%;
-            overflow: hidden;   
-        }
-        
-        #content {
-            background-color: #ffffff;
-            flex: 1;
-            padding: 60px 20px 40px;
-        }
-        
-        #footer {
-            background-color: #ffffff;
-            padding: 20px;
-        }
-        </style>
-        <title>{% block title %}Example{% endblock %}</title>
-    </head>
+    <meta charset=\"UTF-8\">
+    <style>
+    html {
+        height: 100%;
+    }
     
-    <body>
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
+    .navbar-nav > li > a {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+        
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    
+    nav h3 {
+      margin-top: 10px;
+      font-size: 32pt;
+    }
+    
+    div.rounded-corners {
+      border-radius: 20%;
+      overflow: hidden;   
+    }
+    
+    #content {
+      background-color: #ffffff;
+      flex: 1;
+      padding: 60px 20px 40px;
+    }
+    
+    #footer {
+      background-color: #ffffff;
+      padding: 20px;
+    }
+    </style>
+    <title> SwiftyBeagle {% block title %} {% endblock %}</title>
+  </head>
+    
+  <body>
+      <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container">
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-            </div><!-- /.navbar-collapse -->
-            <h3>SwiftyBeagle</h3>
-            </div><!-- /.container -->
-        </nav>
-        <div id="content">
-            <div class="container">
-            {% block content %} {% endblock %}
-            </div> <!-- /.container -->
-        </div>
-        <footer id="footer">
-            <div class="container">
-            {% block footer %}
-                <p align="center">Uptime: {{ app.uptime }} </p>
-                <p align="center">
-                    Served with the power of <BR>
-                    <img src="/Apple_Swift_logo.png" width=64>
-                </p>
-            {% endblock %}
-            </div> <!-- /.container -->
-            <!-- Bootstrap core JavaScript
-            ================================================== -->
-            <!-- Placed at the end of the document so the pages load faster -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-            <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-            <script>
-                $(document).ready(function() {
-                  $('li.active').removeClass('active');
-                  $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
-                });
-            </script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-            <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-            <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
-        </footer>
-    </body>
+          </div><!-- /.navbar-collapse -->
+              <h3><a href="/" >🐶</a></h3>
+          </div><!-- /.container -->
+      </nav>
+      <div id="content">
+          <div class="container">
+          {% block content %} {% endblock %}
+          </div> <!-- /.container -->
+      </div>
+      <footer id="footer">
+          <div class="container">
+          {% block footer %}
+              <p align="center">Uptime: {{ app.uptime }} </p>
+              <p align="center">
+                  Served with the power of <BR>
+                  <img src="/Apple_Swift_logo.png" width=64>
+              </p>
+          {% endblock %}
+          </div> <!-- /.container -->
+          <!-- Bootstrap core JavaScript
+          ================================================== -->
+          <!-- Placed at the end of the document so the pages load faster -->
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+          <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+          <script>
+              $(document).ready(function() {
+                $('li.active').removeClass('active');
+                $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+              });
+          </script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+          <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+          <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+      </footer>
+  </body>
 </html>

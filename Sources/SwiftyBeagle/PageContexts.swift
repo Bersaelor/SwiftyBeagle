@@ -24,8 +24,21 @@ extension ValidationSummary {
         formatter.timeStyle = .medium
         let humanReadableDate = formatter.string(from: date)
         return [
-            "url": "./summary/\(self.id ?? "0")",
-            "description": "\(count) out of \(count) successfully checked API-Responses \(humanReadableDate)",
+            "url": "./summaries/\(self.id ?? "0")",
+            "description": "Checked API-Responses \(humanReadableDate): \(count)",
+        ]
+    }
+}
+
+extension ValidationResult {
+    var stencilContext: [String: String] {
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        let durationString = formatter.string(for: duration * 1000) ?? "?"
+        return [
+            "url": "n.A.",
+            "description": text,
+            "duration": durationString,
         ]
     }
 }

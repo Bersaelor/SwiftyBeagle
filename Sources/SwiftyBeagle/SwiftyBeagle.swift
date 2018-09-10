@@ -70,12 +70,6 @@ public class SwiftyBeagle {
     var cachedSummaries = [ValidationSummary]() {
         didSet {
             Log.info("Now caching \(cachedSummaries.count) summaries")
-            if let summary = cachedSummaries.first {
-                Log.info("First summary is from \(summary.date)")
-                getAllResults(for: summary) { (results, _) in
-                    Log.info("Found \(results?.count ?? -1) results for this summary")
-                }
-            }
         }
     }
     
@@ -167,6 +161,24 @@ extension SwiftyBeagle {
             defer { next() }
             guard let strongSelf = self else { return }
             try res.renderHomePage(for: strongSelf, summaries: strongSelf.cachedSummaries)
+        }
+        
+        router.get("/summaries/:id") { [weak self] req, res, next in
+            defer { next() }
+            guard let strongSelf = self else { return }
+            guard let id = req.parameters["id"], let summary = strongSelf.cachedSummaries.first(where: { $0.id == id }) else { return }
+            strongSelf.getAllResults(for: summary) { (results, _) in
+                guard let results = results else {
+                    Log.error("Failed to get results for summary \(summary)")
+                    return
+                }
+                Log.info("Found \(results.count) results for this summary")
+                do {
+                    try res.renderValidations(for: summary, with: results)
+                } catch {
+                    Log.error("Failed rendering validation page because of \(error)")
+                }
+            }
         }
     }
 }
