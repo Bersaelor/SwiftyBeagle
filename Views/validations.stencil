@@ -9,9 +9,11 @@
     {% if validations %}
         <H4>Validations:</H4>
         <ul>
-            {% for validation in validations %}
-            <li> Fetching <a href="{{ validation.url }}"> url </a> took {{ validation.duration }}ms, result: {{ validation.description }}</li>
-            {% endfor %}
+          {% for validation in validations %}
+          <li class="{{ validation.severity }}">
+            Fetching <a href="{{ validation.url }}"> url </a> took {{ validation.duration }}ms, result: {{ validation.description }}
+          </li>
+          {% endfor %}
         </ul>
     {% else %}
         SwiftyBeagle just started, no full validations finished yet

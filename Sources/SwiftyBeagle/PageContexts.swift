@@ -35,6 +35,16 @@ extension ValidationSummary {
     }
 }
 
+extension ValidationStatus {
+    var severityClass: String {
+        switch self {
+        case .ok: return " "
+        case .warning: return "WarningText"
+        case .error: return "ErrorText"
+        }
+    }
+}
+
 extension ValidationResult {
     var stencilContext: [String: String] {
         let formatter = NumberFormatter()
@@ -44,6 +54,7 @@ extension ValidationResult {
             "url": urlString,
             "description": text,
             "duration": durationString,
+            "severity": status.severityClass
         ]
     }
 }

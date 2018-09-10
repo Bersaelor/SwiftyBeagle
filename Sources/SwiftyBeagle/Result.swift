@@ -1,5 +1,5 @@
-
 import Foundation
+import LoggerAPI
 
 public enum Result<Value> {
     case success(Value)
@@ -28,7 +28,11 @@ extension Result where Value == String {
         case .success(let value):
             return value
         case .failure(let error):
-            return "ERROR: \(error.localizedDescription)"
+            if let severityInfo = error as? HasWarningSeverity, severityInfo.severity == .warning {
+                return "Warning: \(error.localizedDescription)"
+            } else {
+                return "ERROR: \(error.localizedDescription)"
+            }
         }
     }
     

@@ -56,6 +56,7 @@ extension ValidationResult {
                                  "text": validationResult.text,
                                  "duration": validationResult.duration,
                                  "urlString": validationResult.urlString,
+                                 "status": validationResult.status.rawValue,
                                  "summaryId": validationResult.summaryId ?? "-1"])
                 database.create(json) { id, _, _, error in
                     callback(id, error)

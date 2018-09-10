@@ -30,6 +30,14 @@
       font-size: 32pt;
     }
     
+    li.WarningText {
+      color: orange;
+    }
+
+    li.ErrorText {
+      color: red;
+    }
+    
     div.rounded-corners {
       border-radius: 20%;
       overflow: hidden;   
