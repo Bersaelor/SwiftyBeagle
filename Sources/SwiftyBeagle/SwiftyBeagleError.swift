@@ -12,3 +12,7 @@ enum SwiftyBeagleError: Error {
     case failedParsingJSON
     case failedCreatingURL(String)
 }
+
+public protocol HasWarningSeverity {
+    var severity: ValidationStatus { get }
+}

@@ -18,9 +18,11 @@ extension ValidationSummary {
                     let data = json["value"]
                     let id = json["id"].stringValue
                     let count = data["count"].intValue
+                    let errorCount = data["errorCount"].intValue
+                    let warningCount = data["warningCount"].intValue
                     let timeStamp = data["timeStamp"].doubleValue
                     
-                    return ValidationSummary(id: id, count: count, timeStamp: timeStamp)
+                    return ValidationSummary(id: id, count: count, warningCount: warningCount, errorCount: errorCount, timeStamp: timeStamp)
                 }) ?? []
                 
                 callback(summaries, nil)
@@ -40,6 +42,8 @@ extension ValidationSummary {
                 }
                 let json = JSON(["type": "summary",
                                  "count": validationSummary.count,
+                                 "errorCount": validationSummary.errorCount,
+                                 "warningCount": validationSummary.warningCount,
                                  "timeStamp": validationSummary.timeStamp])
                 database.create(json) { id, _, _, error in
                     callback(id, error)
@@ -55,6 +59,8 @@ extension ValidationSummary {
                 }
                 let result = ValidationSummary(id: document["_id"].stringValue,
                                               count: document["count"].intValue,
+                                              warningCount: document["warningCount"].intValue,
+                                              errorCount: document["errorCount"].intValue,
                                               timeStamp: document["timeStamp"].doubleValue)
                 callback(result, nil)
             }

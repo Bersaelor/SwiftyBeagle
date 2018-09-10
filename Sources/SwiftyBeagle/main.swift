@@ -17,6 +17,9 @@ app.makeValidations = {
             if projectResponse.projects.isEmpty {
                 return Result.failure(KSErrors.projectsArrayEmpty)
             }
+            if projectResponse.projects.first?.backers_count ?? 0 < 10 {
+                return Result.failure(KSErrors.backerCountToSmall)
+            }
             return Result.success(projectResponse)
         }, makeChildValidations: { (projectResponse) in
             return projectResponse.projects.map({ (project) -> Validation in

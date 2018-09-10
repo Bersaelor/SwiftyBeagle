@@ -35,7 +35,11 @@ public class SwiftyBeagle {
     
     public func run() {
         scheduler.saveValidations = { [weak self] results in
-            let summary = ValidationSummary(id: nil, count: results.count, timeStamp: Date.timeIntervalSinceReferenceDate)
+            let errorCount = results.filter({ $0.status == .error }).count
+            let warningCount = results.filter({ $0.status == .warning }).count
+            let summary = ValidationSummary(id: nil, count: results.count,
+                                            warningCount: warningCount, errorCount: errorCount,
+                                            timeStamp: Date.timeIntervalSinceReferenceDate)
             self?.addSummary(summary, completion: { (summary, error) in
                 if let error = error {
                     Log.error("Failed save summary of validation due to \(error)")

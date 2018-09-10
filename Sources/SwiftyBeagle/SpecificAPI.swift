@@ -12,6 +12,7 @@ struct KSProject: Codable {
     let category: KSCategory
     let name: String
     let blurb: String
+    let backers_count: Int
     let photo: KSPhoto
 }
 
@@ -28,7 +29,19 @@ struct KSCategory: Codable {
 
 enum KSErrors: Error {
     case projectsArrayEmpty
+    case backerCountToSmall
     case emptyImage
+}
+
+extension KSErrors: HasWarningSeverity {
+    var severity: ValidationStatus {
+        switch self {
+        case .backerCountToSmall:
+            return .warning
+        default:
+            return .error
+        }
+    }
 }
 
 extension KSSearchResponse: BeagleStringConvertible {

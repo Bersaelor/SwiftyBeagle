@@ -31,8 +31,10 @@ extension ValidationResult {
                     let text = data["text"].stringValue
                     let duration = data["duration"].doubleValue
                     let urlString = data["urlString"].stringValue
-                    
-                    return ValidationResult(id: id, text: text, duration: duration, urlString: urlString, summaryId: summaryId)
+                    let status = data["status"].intValue
+
+                    return ValidationResult(id: id, text: text, duration: duration, urlString: urlString,
+                                            status: ValidationStatus(rawValue: status) ?? .error, summaryId: summaryId)
                 }) ?? []
                 
                 callback(validations, nil)
@@ -71,6 +73,7 @@ extension ValidationResult {
                                               text: document["text"].stringValue,
                                               duration: document["duration"].doubleValue,
                                               urlString: document["urlString"].stringValue,
+                                              status: ValidationStatus(rawValue: document["status"].intValue) ?? .error,
                                               summaryId: document["summaryId"].stringValue)
                 callback(result, nil)
             }
