@@ -14,6 +14,7 @@ extension RouterResponse {
         var context = StencilContext()
         context["app"] = app.stencilContext
         context["validations"] = summaries.reversed().map({ $0.stencilContext })
+        context["chartrows"] = summaries.map({ $0.chartRowContext })
         try self.render(fileName: "main.stencil", context: context)
     }
     

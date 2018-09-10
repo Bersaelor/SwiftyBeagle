@@ -33,6 +33,18 @@ extension ValidationSummary {
             "description": "Checked API-Responses \(humanReadableDate): \(countsString)",
         ]
     }
+    
+    var chartRowContext: [String: String] {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return [
+            "time": formatter.string(from: date),
+            "success": "\(count - warningCount - errorCount)",
+            "warnings": "\(warningCount)",
+            "errors": "\(errorCount)",
+        ]
+    }
 }
 
 extension ValidationStatus {

@@ -5,9 +5,8 @@
 {% block content %}
 <H3 align="center"> {{ summary.description }} </H3>
 
-    <p align="center">
     {% if validations %}
-        <H4>Validations:</H4>
+      <div class="centerList">    
         <ul>
           {% for validation in validations %}
           <li class="{{ validation.severity }}">
@@ -15,11 +14,10 @@
           </li>
           {% endfor %}
         </ul>
+      </div>  
     {% else %}
         SwiftyBeagle just started, no full validations finished yet
     {% endif %}
-    </p>
-
 
 {% endblock %}
 

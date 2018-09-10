@@ -49,6 +49,12 @@
       padding: 60px 20px 40px;
     }
     
+    .centerList {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
     #footer {
       background-color: #ffffff;
       padding: 20px;

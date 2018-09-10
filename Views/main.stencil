@@ -1,22 +1,60 @@
 {% extends "base.stencil" %}
 
+{% block import %}
+    {{ block.super }}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+          ['Month', 'Successful', 'Warnings', 'Errors'],
+          {% if chartrows %}
+            {% for row in chartrows %}
+          ['{{ row.time }}',  {{ row.success }}, {{ row.warnings }}, {{ row.errors }}],
+            {% endfor %}
+          {% endif %}
+        ]);
+
+        var options = {
+          isStacked: true,
+          bar: {groupWidth: "50%"},
+          seriesType: 'bars',
+          vAxis: { textPosition: 'none' },
+          legend: 'top',
+          series: {
+            0: { color: '#55c405'},
+            1: { color: '#f1ca3a'},
+            2: { color: '#e2431e'},
+          }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+          chart.draw(data, options);
+        }
+    </script>
+{% endblock %}
 {% block title %}  {% endblock %}
 
 {% block content %}
 <H3 align="center">Keeping an eye on api-responses for you </H3>
 
-    <p align="center">
-    {% if validations %}
+    <div class="centerList">    
+      <div id="chart_div" style="width: 1000px; height: 260px;"></div>
+    </div>
+    <div class="centerList">    
+      {% if validations %}
         <ul>
             {% for validation in validations %}
             <li> <a href="{{ validation.url }}"> {{ validation.description }} </a> </li>
             {% endfor %}
         </ul>
-    {% else %}
+      {% else %}
         SwiftyBeagle just started, no full validations finished yet
-    {% endif %}
-    </p>
-
+      {% endif %}
+    </div>
 
 {% endblock %}
 
