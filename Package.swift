@@ -14,7 +14,8 @@ let package = Package(
     targets: [
         .target(
             name: "SwiftyBeagle",
-            dependencies: ["Kitura" , "HeliumLogger", "CouchDB", "KituraStencil"]),
+            dependencies: ["Kitura" , "HeliumLogger", "CouchDB", "KituraStencil"],
+            exclude: ["ExampleiOS"]),
         .testTarget(
             name: "SwiftyBeagleTests",
             dependencies: ["SwiftyBeagle"])
