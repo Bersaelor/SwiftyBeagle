@@ -36,7 +36,7 @@ extension ValidationResult {
         formatter.minimumFractionDigits = 0
         let durationString = formatter.string(for: duration * 1000) ?? "?"
         return [
-            "url": "n.A.",
+            "url": urlString,
             "description": text,
             "duration": durationString,
         ]

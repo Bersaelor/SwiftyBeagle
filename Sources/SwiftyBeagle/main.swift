@@ -20,7 +20,7 @@ app.makeValidations = {
             return Result.success(projectResponse)
         }, makeChildValidations: { (projectResponse) in
             return projectResponse.projects.map({ (project) -> Validation in
-                return FetchImage(urlString: project.photo.thumb) { dataResponse in
+                return FetchImage(urlString: project.photo.little) { dataResponse in
                     if dataResponse.isEmpty {
                         return Result.failure(KSErrors.emptyImage)
                     }

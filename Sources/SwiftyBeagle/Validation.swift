@@ -18,7 +18,7 @@ extension Array where Element == Validation {
         for validation in self {
             taskGroup.enter()
             validation.start { (result, timeElapsed) in
-                results.append(ValidationResult(result: result.map({ $0.0 }), fetchDuration: timeElapsed))
+                results.append(ValidationResult(result: result.map({ $0.0 }), fetchDuration: timeElapsed, urlString: validation.urlString))
                 
                 if case .success(_, let validations) = result, !validations.isEmpty {
                     validations.validateAll(completion: { (childResults) in

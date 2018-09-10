@@ -30,8 +30,9 @@ extension ValidationResult {
                     let summaryId = data["summaryId"].stringValue
                     let text = data["text"].stringValue
                     let duration = data["duration"].doubleValue
+                    let urlString = data["urlString"].stringValue
                     
-                    return ValidationResult(id: id, text: text, duration: duration, summaryId: summaryId)
+                    return ValidationResult(id: id, text: text, duration: duration, urlString: urlString, summaryId: summaryId)
                 }) ?? []
                 
                 callback(validations, nil)
@@ -52,6 +53,7 @@ extension ValidationResult {
                 let json = JSON(["type": "validation",
                                  "text": validationResult.text,
                                  "duration": validationResult.duration,
+                                 "urlString": validationResult.urlString,
                                  "summaryId": validationResult.summaryId ?? "-1"])
                 database.create(json) { id, _, _, error in
                     callback(id, error)
@@ -68,6 +70,7 @@ extension ValidationResult {
                 let result = ValidationResult(id: document["_id"].stringValue,
                                               text: document["text"].stringValue,
                                               duration: document["duration"].doubleValue,
+                                              urlString: document["urlString"].stringValue,
                                               summaryId: document["summaryId"].stringValue)
                 callback(result, nil)
             }
