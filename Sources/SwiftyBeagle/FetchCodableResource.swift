@@ -3,9 +3,17 @@ import Foundation
 public struct FetchCodableResource<T: Codable>: Validation {
 
     public let urlString: String
-    public let dataIntegrityCheck: (T) -> Result<T>
-    public let makeChildValidations: (T) -> [Validation]
+    let dataIntegrityCheck: (T) -> Result<T>
+    let makeChildValidations: (T) -> [Validation]
     
+    public init(urlString: String,
+                dataIntegrityCheck: @escaping (T) -> Result<T>,
+                makeChildValidations: @escaping (T) -> [Validation]) {
+        self.urlString = urlString
+        self.dataIntegrityCheck = dataIntegrityCheck
+        self.makeChildValidations = makeChildValidations
+    }
+
     public func start(completion: @escaping (Result<(String, [Validation])>, TimeInterval) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)), 0)
