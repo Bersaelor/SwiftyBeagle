@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "KickstarterMonitoring",
     dependencies: [
-        .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "1.0.0")),
+        .package(url: "../../", .upToNextMinor(from: "0.0.1")),
     ],
     targets: [
         .target(
