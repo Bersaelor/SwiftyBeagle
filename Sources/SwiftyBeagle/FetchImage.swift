@@ -1,11 +1,11 @@
 import Foundation
 
-struct FetchImage: Validation {
+public struct FetchImage: Validation {
     
-    let urlString: String
-    let dataIntegrityCheck: (Data) -> Result<Data>
+    public let urlString: String
+    public let dataIntegrityCheck: (Data) -> Result<Data>
     
-    func start(completion: @escaping (Result<(String, [Validation])>, TimeInterval) -> Void) {
+    public func start(completion: @escaping (Result<(String, [Validation])>, TimeInterval) -> Void) {
         guard let url = URL(string: urlString) else {
             completion(Result.failure(SwiftyBeagleError.failedCreatingURL(urlString)), 0)
             return
