@@ -6,6 +6,8 @@ import KituraStencil
 
 public class SwiftyBeagle {
 
+    public init() {}
+
     private let startTime = Date()
     
     var upTime: String {

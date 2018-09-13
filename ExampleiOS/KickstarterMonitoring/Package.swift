@@ -6,14 +6,14 @@ import PackageDescription
 let package = Package(
     name: "KickstarterMonitoring",
     dependencies: [
-        .package(url: "../../", .upToNextMinor(from: "0.0.1")),
-    ],
+        .package(url: "../../", .upToNextMinor(from: "0.1.0")),
+        ],
     targets: [
         .target(
             name: "KickstarterMonitoring",
-            dependencies: []),
+            dependencies: ["SwiftyBeagle"]),
         .testTarget(
             name: "KickstarterMonitoringTests",
             dependencies: ["KickstarterMonitoring"]),
-    ]
+        ]
 )
