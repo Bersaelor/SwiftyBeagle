@@ -1,0 +1,1 @@
+../../../SwiftyBeagleExample/Feed.swift

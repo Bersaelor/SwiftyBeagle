@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "KickstarterMonitoring",
     dependencies: [
-        .package(url: "../../", .upToNextMinor(from: "0.1.4")),
+        .package(url: "../../", .upToNextMinor(from: "0.1.5")),
         ],
     targets: [
         .target(
@@ -14,8 +14,10 @@ let package = Package(
             dependencies: ["SwiftyBeagle"],
             path: "",
             sources: ["Sources",
-                      "../SwiftyBeagleExample/Model",
-                      "../SwiftyBeagleExample/Feed.swift"]),
+                      "Sources/KickstarterMonitoring/Model"
+//                      "../SwiftyBeagleExample/Model",
+//                      "../SwiftyBeagleExample/Feed.swift"
+            ]),
         .testTarget(
             name: "KickstarterMonitoringTests",
             dependencies: ["KickstarterMonitoring"]),
