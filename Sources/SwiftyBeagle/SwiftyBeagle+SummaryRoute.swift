@@ -5,9 +5,9 @@ import LoggerAPI
 
 extension SwiftyBeagle {
     func initializeSummaryRoutes() {
-        app.router.get("/summaries", handler: getSummaries)
-        app.router.post("/summaries", handler: addSummary)
-        app.router.delete("/summaries", handler: deleteItem)
+        router.get("/summaries", handler: getSummaries)
+        router.post("/summaries", handler: addSummary)
+        router.delete("/summaries", handler: deleteItem)
     }
     
     func getSummaries(completion: @escaping ([ValidationSummary]?, RequestError?) -> Void) {

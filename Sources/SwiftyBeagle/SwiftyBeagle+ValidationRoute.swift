@@ -5,9 +5,9 @@ import LoggerAPI
 
 extension SwiftyBeagle {
     func initializeValidationRoutes() {
-        app.router.get("/validations", handler: getValidations)
-        app.router.post("/validations", handler: addValidation)
-        app.router.delete("/validations", handler: deleteItem)
+        router.get("/validations", handler: getValidations)
+        router.post("/validations", handler: addValidation)
+        router.delete("/validations", handler: deleteItem)
     }
     
     func getValidations(completion: @escaping ([ValidationResult]?, RequestError?) -> Void) {
