@@ -6,12 +6,16 @@ import PackageDescription
 let package = Package(
     name: "KickstarterMonitoring",
     dependencies: [
-        .package(url: "../../", .upToNextMinor(from: "0.1.2")),
+        .package(url: "../../", .upToNextMinor(from: "0.1.4")),
         ],
     targets: [
         .target(
             name: "KickstarterMonitoring",
-            dependencies: ["SwiftyBeagle"]),
+            dependencies: ["SwiftyBeagle"],
+            path: "",
+            sources: ["Sources",
+                      "../SwiftyBeagleExample/Model",
+                      "../SwiftyBeagleExample/Feed.swift"]),
         .testTarget(
             name: "KickstarterMonitoringTests",
             dependencies: ["KickstarterMonitoring"]),
