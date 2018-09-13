@@ -18,7 +18,7 @@ extension RouterResponse {
         try self.render(fileName: "main.stencil", context: context)
     }
     
-    func renderValidations(for summary: ValidationSummary, with results: [ValidationResult]) throws {
+    func renderValidations(for summary: ValidationSummary, app: SwiftyBeagle, with results: [ValidationResult]) throws {
         var context = StencilContext()
         context["app"] = app.stencilContext
         context["summary"] = summary.stencilContext

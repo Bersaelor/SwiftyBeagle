@@ -180,7 +180,7 @@ extension SwiftyBeagle {
                 }
                 Log.info("Found \(results.count) results for this summary")
                 do {
-                    try res.renderValidations(for: summary, with: results)
+                    try res.renderValidations(for: summary, app: strongSelf, with: results)
                 } catch {
                     Log.error("Failed rendering validation page because of \(error)")
                 }
