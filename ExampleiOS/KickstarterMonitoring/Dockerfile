@@ -14,6 +14,3 @@ RUN swift package resolve
 RUN swift build
 
 ENV PATH ${PATH}:/app/.build/debug
-
-# ENTRYPOINT [ "/app/.build/debug/SwiftyBeagle" ]
-# CMD [ "live" ]
