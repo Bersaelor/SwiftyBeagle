@@ -11,13 +11,7 @@ let package = Package(
     targets: [
         .target(
             name: "KickstarterMonitoring",
-            dependencies: ["SwiftyBeagle"],
-            path: "",
-            sources: ["Sources",
-                      "Sources/KickstarterMonitoring/Model"
-//                      "../SwiftyBeagleExample/Model",
-//                      "../SwiftyBeagleExample/Feed.swift"
-            ]),
+            dependencies: ["SwiftyBeagle"]),
         .testTarget(
             name: "KickstarterMonitoringTests",
             dependencies: ["KickstarterMonitoring"]),
